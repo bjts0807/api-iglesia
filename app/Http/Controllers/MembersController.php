@@ -32,6 +32,20 @@ class MembersController extends Controller
         : $query->get();
     }
 
+    public function data_source_member(Request $request)
+    {
+        $s = $request->s;
+
+        $members = Member::selectRaw('id, concat("",first_name," ",second_name," ",first_surname," ",second_surname) as text')
+            ->where('first_name', 'like', '%' . $s . '%')
+            ->orWhere('second_name', 'like', $s . '%')
+            ->orWhere('first_surname', 'like', $s . '%')
+            ->orWhere('second_surname', 'like', $s . '%')
+            ->limit(3)
+            ->get();
+
+        return response()->json(['results' => $members]);
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -77,7 +91,8 @@ class MembersController extends Controller
      */
     public function show($id)
     {
-        //
+        $member=Member::where('id', $id)->first();
+        return response()->json($member);
     }
 
     /**
@@ -87,9 +102,35 @@ class MembersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        try {
+
+            DB::beginTransaction();
+
+            $member=Member::find($request->id);
+            $member->first_name=strtoupper($request->first_name);
+            $member->second_name=strtoupper($request->second_name);
+            $member->first_surname=strtoupper($request->first_surname);
+            $member->second_surname=strtoupper($request->second_surname);
+            $member->document_type=$request->document_type;
+            $member->document_number=$request->document_number;
+            $member->birthday=$request->birthday;
+            $member->active_member=$request->active_member;
+            $member->email=$request->email;
+            $member->address=strtoupper($request->address);
+            $member->phone=$request->phone;
+            $member->save();
+
+            DB::commit();
+
+            return response()->json($member);
+
+        } catch (\Exception $ex) {
+            DB::rollBack();
+            Log::error($ex->getMessage().PHP_EOL.$ex->getTraceAsString());
+            return response()->json(['status' => 'fail', 'msg' => 'Ha ocurrido un error al procesar la solicitud'], 500);
+        }
     }
 
     /**
