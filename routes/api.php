@@ -33,4 +33,6 @@ Route::prefix('tithes')->group(function () {
     Route::post('/store', [TitheController::class, 'store']);
     Route::put('/update', [TitheController::class, 'update']);
     Route::delete('/destroy', [TitheController::class, 'destroy']);
+    Route::get('/show/{id}', [TitheController::class, 'show']);
+
 });
