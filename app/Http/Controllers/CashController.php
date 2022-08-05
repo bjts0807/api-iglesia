@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cash;
+use App\Models\Expense;
+use App\Models\Offering;
+use App\Models\Tithe;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CashController extends Controller
 {
@@ -80,5 +85,43 @@ class CashController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function getCash(){
+        $total_incomes = Cash::where('type', 'ENTRADA')
+        ->select(DB::raw("sum(value) as total"))
+        ->first();
+        
+        $total_expenses_cash = Cash::where('type', 'SALIDA')
+        ->select(DB::raw("sum(value) as total"))
+        ->first();
+
+        $date_now=date('Y-m-d');
+
+        $total_tithes = Tithe::where('date', $date_now)
+        ->select(DB::raw("sum(value) as total"))
+        ->first();
+
+        $total_offerings = Offering::where('date', $date_now)
+        ->select(DB::raw("sum(value) as total"))
+        ->first();
+
+        $total_expenses = Expense::where('date', $date_now)
+        ->select(DB::raw("sum(value) as total"))
+        ->first();
+
+        $total_cash=(($total_incomes->total)-($total_expenses_cash->total));
+
+        $results=[
+            "total_incomes"=>$total_incomes->total,
+            "total_expenses_cash"=>$total_expenses_cash->total,
+            "total_cash"=>$total_cash,
+            "total_tithes"=>$total_tithes->total,
+            "total_offerings"=>$total_offerings->total,
+            "total_expenses"=>$total_expenses->total,
+        ]; 
+
+        return response()->json($results);
+        
     }
 }

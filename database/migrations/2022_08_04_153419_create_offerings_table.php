@@ -17,7 +17,7 @@ class CreateOfferingsTable extends Migration
             $table->id();
             $table->date('date');
             $table->double('value');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();

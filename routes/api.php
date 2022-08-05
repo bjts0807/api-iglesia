@@ -1,5 +1,9 @@
 <?php
+
+use App\Http\Controllers\CashController;
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\MembersController;
+use App\Http\Controllers\OfferingController;
 use App\Http\Controllers\TitheController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -34,5 +38,25 @@ Route::prefix('tithes')->group(function () {
     Route::put('/update', [TitheController::class, 'update']);
     Route::delete('/destroy', [TitheController::class, 'destroy']);
     Route::get('/show/{id}', [TitheController::class, 'show']);
+});
 
+Route::prefix('offerings')->group(function () {
+    Route::get('/', [OfferingController::class, 'index']);
+    Route::post('/store', [OfferingController::class, 'store']);
+    Route::put('/update', [OfferingController::class, 'update']);
+    Route::delete('/destroy', [OfferingController::class, 'destroy']);
+    Route::get('/show/{id}', [OfferingController::class, 'show']);
+});
+
+Route::prefix('expenses')->group(function () {
+    Route::get('/', [ExpenseController::class, 'index']);
+    Route::post('/store', [ExpenseController::class, 'store']);
+    Route::put('/update', [ExpenseController::class, 'update']);
+    Route::delete('/destroy', [ExpenseController::class, 'destroy']);
+    Route::get('/show/{id}', [ExpenseController::class, 'show']);
+    Route::get('/getCash', [ExpenseController::class, 'getCash']);
+});
+
+Route::prefix('cash')->group(function () {
+    Route::get('/getCash', [CashController::class, 'getCash']);
 });
