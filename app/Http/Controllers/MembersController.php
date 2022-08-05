@@ -22,7 +22,10 @@ class MembersController extends Controller
 
         $query->when($request->has('s'), function($query) use($request){
             $search = trim($request->s);
-            $query->where('first_name', 'like', '%' . $search . '%');
+            $query->where('first_name', 'like', '%' . $search . '%')
+            ->orWhere('second_name', 'like', $search . '%')
+            ->orWhere('first_surname', 'like', $search . '%')
+            ->orWhere('second_surname', 'like', $search . '%');
             
         });
         // ->with(['factura.usuario','user']);

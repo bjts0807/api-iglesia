@@ -20,11 +20,11 @@ class CreateMembersTable extends Migration
             $table->string('first_surname')->nullable();
             $table->string('second_surname')->nullable();
             $table->enum('document_type',['CC','TI','RI']);
-            $table->string('document_number');
+            $table->string('document_number')->nullable();
             $table->string('phone')->nullable();
             $table->string('address')->nullable();
             $table->string('email')->nullable();
-            $table->date('birthday');
+            $table->date('birthday')->nullable();
             $table->enum('active_member',['S','N'])->default('S');
             $table->enum('active',['S','N'])->default('S');
             $table->timestamps();
