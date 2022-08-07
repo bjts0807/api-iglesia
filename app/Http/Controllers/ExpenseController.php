@@ -65,7 +65,7 @@ class ExpenseController extends Controller
             ]);
 
             Cash::create([
-                'date'=>date('Y-m-d'),
+                'date'=>$request->date,
                 'user_id'=>$idUser,
                 'value'=>$request->value,
                 'type'=>'SALIDA',
@@ -127,7 +127,10 @@ class ExpenseController extends Controller
             $expense->save();
 
             Cash::where('respuestable_id',$request->id)->where('respuestable_type',get_class(new Expense()))
-            ->update(['value' => $request->value]);
+            ->update([
+                'value' => $request->value,
+                'date' => $request->date,
+            ]);
 
             DB::commit();
 
@@ -150,5 +153,5 @@ class ExpenseController extends Controller
     {
         //
     }
-    
+
 }

@@ -24,7 +24,7 @@ class OfferingController extends Controller
         $query->when($request->has('s'), function($query) use($request){
             $search = trim($request->s);
             $query->where('date', 'like', '%' . $search . '%');
-            
+
         })
         ->with(['user'])
         ->orderBy('date','desc');
@@ -66,7 +66,7 @@ class OfferingController extends Controller
             ]);
 
             Cash::create([
-                'date'=>date('Y-m-d'),
+                'date'=>$request->date,
                 'user_id'=>$idUser,
                 'value'=>$request->value,
                 'type'=>'ENTRADA',
@@ -128,7 +128,12 @@ class OfferingController extends Controller
             $offering->save();
 
             Cash::where('respuestable_id',$request->id)->where('respuestable_type',get_class(new Offering()))
-            ->update(['value' => $request->value]);
+            ->update(
+                [
+                    'value' => $request->value,
+                    'date'=>$request->date
+                ]
+            );
 
             DB::commit();
 

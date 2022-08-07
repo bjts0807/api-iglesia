@@ -6,6 +6,7 @@ use App\Models\Cash;
 use App\Models\Expense;
 use App\Models\Offering;
 use App\Models\Tithe;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -91,12 +92,12 @@ class CashController extends Controller
         $total_incomes = Cash::where('type', 'ENTRADA')
         ->select(DB::raw("sum(value) as total"))
         ->first();
-        
+
         $total_expenses_cash = Cash::where('type', 'SALIDA')
         ->select(DB::raw("sum(value) as total"))
         ->first();
 
-        $date_now=date('Y-m-d');
+        $date_now=Carbon::now('America/Bogota')->format('Y-m-d');
 
         $total_tithes = Tithe::where('date', $date_now)
         ->select(DB::raw("sum(value) as total"))
@@ -119,9 +120,9 @@ class CashController extends Controller
             "total_tithes"=>$total_tithes->total,
             "total_offerings"=>$total_offerings->total,
             "total_expenses"=>$total_expenses->total,
-        ]; 
+        ];
 
         return response()->json($results);
-        
+
     }
 }
