@@ -18,8 +18,8 @@ class CreateCashTable extends Migration
             $table->date('date');
             $table->double('value');
             $table->enum('type',['ENTRADA','SALIDA']);
-            $table->string('respuestable_type');
-            $table->integer('respuestable_id');
+            $table->string('respuestable_type')->nullable();
+            $table->integer('respuestable_id')->nullable();
             $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();

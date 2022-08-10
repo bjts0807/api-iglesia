@@ -20,7 +20,7 @@ class DashboardController extends Controller
     */
 
 
-    public function getCash(){
+    public function getValueCash(){
         $total_incomes = Cash::where('type', 'ENTRADA')
         ->select(DB::raw("sum(value) as total"))
         ->first();
@@ -29,29 +29,10 @@ class DashboardController extends Controller
         ->select(DB::raw("sum(value) as total"))
         ->first();
 
-        $date_now=Carbon::now('America/Bogota')->format('Y-m-d');
-
-        $total_tithes = Tithe::where('date', $date_now)
-        ->select(DB::raw("sum(value) as total"))
-        ->first();
-
-        $total_offerings = Offering::where('date', $date_now)
-        ->select(DB::raw("sum(value) as total"))
-        ->first();
-
-        $total_expenses = Expense::where('date', $date_now)
-        ->select(DB::raw("sum(value) as total"))
-        ->first();
-
         $total_cash=(($total_incomes->total)-($total_expenses_cash->total));
 
         $results=[
-            "total_incomes"=>$total_incomes->total,
-            "total_expenses_cash"=>$total_expenses_cash->total,
             "total_cash"=>$total_cash,
-            "total_tithes"=>$total_tithes->total,
-            "total_offerings"=>$total_offerings->total,
-            "total_expenses"=>$total_expenses->total,
         ];
 
         return response()->json($results);

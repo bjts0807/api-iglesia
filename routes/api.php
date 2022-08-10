@@ -63,6 +63,6 @@ Route::prefix('cash')->group(function () {
 });
 
 Route::prefix('dashboard')->group(function () {
-    Route::get('/getCash', [DashboardController::class, 'getCash']);
+    Route::get('/getValueCash', [DashboardController::class, 'getValueCash']);
     Route::get('/dashboardCount', [DashboardController::class, 'dashboardCount']);
 });
