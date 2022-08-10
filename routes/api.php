@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CashController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\MembersController;
 use App\Http\Controllers\OfferingController;
@@ -59,4 +60,9 @@ Route::prefix('expenses')->group(function () {
 
 Route::prefix('cash')->group(function () {
     Route::get('/getCash', [CashController::class, 'getCash']);
+});
+
+Route::prefix('dashboard')->group(function () {
+    Route::get('/getValueCash', [DashboardController::class, 'getValueCash']);
+    Route::get('/dashboardCount', [DashboardController::class, 'dashboardCount']);
 });

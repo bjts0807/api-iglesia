@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cash;
 use App\Models\Tithe;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -65,17 +66,18 @@ class TitheController extends Controller
             DB::beginTransaction();
 
             $idUser=Auth::user()->id;
+            $date=Carbon::now('America/Bogota')->format('Y-m-d');
 
             foreach($request->tithes as $item){
                 $tithe=Tithe::create([
-                    'date'=>date('Y-m-d'),
+                    'date'=>$date,
                     'user_id'=>$idUser,
                     'value'=>$item['value'],
                     'member_id'=>$item['member']['id'],
                 ]);
 
                 Cash::create([
-                    'date'=>date('Y-m-d'),
+                    'date'=>$date,
                     'user_id'=>$idUser,
                     'value'=>$item['value'],
                     'type'=>'ENTRADA',
